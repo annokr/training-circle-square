@@ -10,14 +10,14 @@
         this.appState.oxFields[this.props.fieldId] = this;
         this.hub.invoke("GetField", this.props.fieldId);
         this.hub.on("UpdateField", (fieldId, value) => {
-        if(fieldId === this.props.fieldId)
-            {
-                this.update({
-                    value,
-                    disabled: false
-                });
-            }
-        });
+          if(fieldId === this.props.fieldId)
+              {
+                  this.update({
+                      value,
+                      disabled: false
+                  });
+              }
+          });
       },
       sendSetField() {
         try {
