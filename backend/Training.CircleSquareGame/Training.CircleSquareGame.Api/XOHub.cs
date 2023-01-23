@@ -34,7 +34,7 @@ public class XOHub : Hub
                 currentPlayer = 'X';
             await Clients.Caller.SendAsync("UpdateField", fieldId, fields[fieldId]);
             await Clients.All.SendAsync("UpdateTurn", currentPlayer);
-            char result = await CheckForWin();
+            char result = CheckForWin();
             if (result != '-')
             {
                 var winner = result;
@@ -55,7 +55,7 @@ public class XOHub : Hub
         await Clients.Caller.SendAsync("SendStandings", winCount['X'], winCount['D'], winCount['O']);
     }
 
-    private async Task<char> CheckForWin()
+    private char CheckForWin()
     {
         for (int i = 0; i < 8; i++)
         {
