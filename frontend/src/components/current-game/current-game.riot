@@ -1,6 +1,6 @@
 <current-player>
     <p>Current player: { state.value }</p>
-    <h1>{ state.winner }</h1>
+    <p>{ state.winner }</p>
     <p> Standings <b>X</b>: { state.XWinsCount } <b> O</b>: { state.OWinsCount } <b> Draws</b>: { state.DrawsCount }</p>
     <script>
     export default {
@@ -21,34 +21,19 @@
             this.hub.on("GameOver", (result) => {
                 if(result === 'D')
                         this.update({
-                        winner: "DRAW"
+                        winner: "Last Game DRAWN"
                     });
                 else
                         this.update({
-                            winner: "Player "+ result + " won the game!"
+                            winner: "Last Game Won by "+ result
                 });
                 this.hub.invoke("NewGame");
-            });
-            this.hub.on("NewStandings", (winner, count) => {
-                if(winner === 'X') {
-                    this.update({
-                        XWinsCount: count
-                    });
-                }
-                else if (winner == 'O') {
-                    this.update({
-                        OWinsCount: count
-                    });
-                }
-                else {
-                    DrawsCount: count
-                }
             });
             this.hub.on("SendStandings", (XWinsCount, DrawsCount, OWinsCount) => {
                 this.update({
                     XWinsCount: XWinsCount,
                     DrawsCount: DrawsCount,
-                    OWinsCount: OWinsCount
+                    OWinsCount: OWinsCount,
                 });
             });
         }

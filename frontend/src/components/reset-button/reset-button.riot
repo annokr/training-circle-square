@@ -3,11 +3,7 @@
     <script>
     export default {
         newGame() {
-            //this.appState.oxFields = {};
             this.hub.invoke("NewGame");
-            // this.appState.exampleText.update({ 
-            //     value: message 
-            // })
             this.hub.on("UpdateFields", fields => {
                     for(const [fieldId, value] of Object.entries(fields)){
                         if(this.appState.oxFields[fieldId]){
@@ -17,9 +13,6 @@
                             });
                         }
                     }
-                    this.appState.currentPlayerComponent.update({
-                        winner: ""
-                    });
                 });
             }
     }

@@ -37,6 +37,9 @@ public class XOHub : Hub
             char result = await CheckForWin();
             if (result != '-')
             {
+                var winner = result;
+                winCount[winner] = winCount[winner] + 1;
+                await Clients.Caller.SendAsync("SendStandings", winCount['X'], winCount['D'], winCount['O']);
                 await Clients.All.SendAsync("GameOver", result);
             }
         }
@@ -49,7 +52,7 @@ public class XOHub : Hub
 
     public async Task GetStandings()
     {
-        await Clients.Caller.SendAsync("SendStandings", winCount.First().Value, winCount['D'], winCount.Last().Value);
+        await Clients.Caller.SendAsync("SendStandings", winCount['X'], winCount['D'], winCount['O']);
     }
 
     private async Task<char> CheckForWin()
@@ -60,32 +63,26 @@ public class XOHub : Hub
             {
                 if (fields[winningPatterns[i, 0]] != '-')
                 {
-                    var winner = fields[winningPatterns[i, 0]];
-                    winCount[winner] = winCount[winner] + 1;
-                    await Clients.All.SendAsync("NewStandings", winner, winCount[winner]);
                     return fields[winningPatterns[i, 0]];
                 }
             }
         }
         if (!fields.Values.Any(f => f == '-'))
         {
-            var winner = 'D';
-            winCount[winner] = winCount[winner] + 1;
-            await Clients.All.SendAsync("NewStandings", winner, winCount[winner]);
-            return winner;
+            return 'D';
         }
         return '-';
     }
 
-    public void NewGame()
+    public async Task NewGame()
     {
         foreach (var key in fields.Keys.ToList())
             fields[key] = '-';
 
         currentPlayer = 'X';
 
-        Clients.All.SendAsync("UpdateFields", fields);
-        Clients.All.SendAsync("UpdateTurn", currentPlayer);
-        Clients.All.SendAsync("SendStandings", winCount.First().Value, winCount['D'], winCount.Last().Value);
+        await Clients.Caller.SendAsync("UpdateFields", fields);
+        await Clients.Caller.SendAsync("UpdateTurn", currentPlayer);
+        await Clients.Caller.SendAsync("SendStandings", winCount['X'], winCount['D'], winCount['O']);
     }
 }
