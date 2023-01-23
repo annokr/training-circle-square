@@ -1,21 +1,34 @@
 <ox-field>
-    <button class="button button-outline" onclick="{ () => sendSetField() }">{ state.value }</button>
+    <button class="button button-outline" onclick="{ () => sendSetField() }" disabled={state.disabled}>{ state.value }</button>
     <script>
     export default {
       async onMounted() {
         this.update({
-          value: ''
+          value: '',
+          disabled: false
         })
         this.appState.oxFields[this.props.fieldId] = this;
         this.hub.invoke("GetField", this.props.fieldId);
+        this.hub.on("UpdateField", (fieldId, value) => {
+        if(fieldId === this.props.fieldId)
+            {
+                this.update({
+                    value,
+                    disabled: false
+                });
+            }
+        });
       },
       sendSetField() {
         try {
+            this.update({
+                disabled: true
+            });
             this.hub.invoke("SetField", this.props.fieldId);
         } catch (err) {
             console.error(err);
         }
       }
     }
-  </script>
+    </script>
 </ox-field>

@@ -3,10 +3,12 @@ import { mount, register, install } from 'riot'
 import Hub from './hub'
 import GameBoard from './components/game-board/game-board.riot'
 import OxField from './components/ox-field/ox-field.riot'
-import ExampleButton from './components/example-button/example-button.riot'
+import ResetButton from './components/reset-button/reset-button.riot'
 import ExampleText from './components/example-text/example-text.riot'
+import CurrentGame from './components/current-game/current-game.riot'
 
 var appState = {
+    currentPlayer: 'X',
     oxFields: {}
 };
 
@@ -34,8 +36,9 @@ install(function(component) {
 
 register('ox-field', OxField)
 register('game-board', GameBoard)
-register('example-button', ExampleButton)
+register('reset-button', ResetButton)
 register('example-text', ExampleText)
+register('current-game', CurrentGame)
 
 // RiotJs component registration happens here here
 // -----------------------------------------------
